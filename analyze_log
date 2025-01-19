@@ -1,0 +1,11 @@
+END{print "\nОтчет о логе веб-сервера\n========================"}
+
+END {print "\nОбщее количество запросов:", "\t", NR, "\n"}
+
+{count[$1]++} END {print "Количество уникальных IP-адресов:", "\t", length(count)}
+
+{ method = $6; gsub(/"/, "", method); if (method != "") methods[method]++} 
+END {print "\nКоличество запросов по методам:"; PROCINFO["sorted_in"] = "@ind_str_desc"; for (method in methods) print "\t", methods[method], method}
+
+
+{urls[$7]++} END {max=0; for (url in urls) {if (urls[url] > max) {max = urls[url]; pop_url=url}}; print "\n\nСамый популярный URL:", "\t", max, pop_url, "\n\n"}
